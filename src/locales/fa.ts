@@ -172,6 +172,11 @@ export const fa = {
     lowStockDesc: "موجودی محصول در حال اتمام است",
     systemUpdate: "به‌روزرسانی سیستم",
     systemUpdateDesc: "نگهداری سیستم برنامه‌ریزی شده است",
+    twoMinutesAgo: "۲ دقیقه پیش",
+    fifteenMinutesAgo: "۱۵ دقیقه پیش",
+    oneHourAgo: "۱ ساعت پیش",
+    threeHoursAgo: "۳ ساعت پیش",
+    fiveHoursAgo: "۵ ساعت پیش",
   },
 
   // Profile

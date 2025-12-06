@@ -24,7 +24,7 @@ interface Notification {
   type: "info" | "success" | "warning" | "message";
   titleKey: string;
   messageKey: string;
-  time: string;
+  timeKey: string;
   read: boolean;
   icon: React.ComponentType<{ className?: string }>;
 }
@@ -37,7 +37,7 @@ export default function NotificationsPage() {
       type: "success",
       titleKey: "newOrder",
       messageKey: "newOrderDesc",
-      time: "2 دقیقه پیش",
+      timeKey: "twoMinutesAgo",
       read: false,
       icon: ShoppingCart,
     },
@@ -46,7 +46,7 @@ export default function NotificationsPage() {
       type: "info",
       titleKey: "newUser",
       messageKey: "newUserDesc",
-      time: "15 دقیقه پیش",
+      timeKey: "fifteenMinutesAgo",
       read: false,
       icon: UserPlus,
     },
@@ -55,7 +55,7 @@ export default function NotificationsPage() {
       type: "message",
       titleKey: "newMessage",
       messageKey: "newMessageDesc",
-      time: "1 ساعت پیش",
+      timeKey: "oneHourAgo",
       read: false,
       icon: MessageSquare,
     },
@@ -64,7 +64,7 @@ export default function NotificationsPage() {
       type: "warning",
       titleKey: "lowStock",
       messageKey: "lowStockDesc",
-      time: "3 ساعت پیش",
+      timeKey: "threeHoursAgo",
       read: true,
       icon: AlertCircle,
     },
@@ -73,7 +73,7 @@ export default function NotificationsPage() {
       type: "info",
       titleKey: "systemUpdate",
       messageKey: "systemUpdateDesc",
-      time: "5 ساعت پیش",
+      timeKey: "fiveHoursAgo",
       read: true,
       icon: Bell,
     },
@@ -177,7 +177,7 @@ export default function NotificationsPage() {
                           {t.notifications[notification.messageKey as keyof typeof t.notifications]}
                         </p>
                         <p className="mt-2 text-xs text-muted-foreground">
-                          {notification.time}
+                        {t.notifications[notification.timeKey as keyof typeof t.notifications]}
                         </p>
                       </div>
                       <div className="flex gap-2">
@@ -240,7 +240,7 @@ export default function NotificationsPage() {
                             {t.notifications[notification.messageKey as keyof typeof t.notifications]}
                           </p>
                           <p className="mt-2 text-xs text-muted-foreground">
-                            {notification.time}
+                            {t.notifications[notification.timeKey as keyof typeof t.notifications]}
                           </p>
                         </div>
                         <div className="flex gap-2">
@@ -288,7 +288,7 @@ export default function NotificationsPage() {
                           {t.notifications[notification.messageKey as keyof typeof t.notifications]}
                         </p>
                         <p className="mt-2 text-xs text-muted-foreground">
-                          {notification.time}
+                          {t.notifications[notification.timeKey as keyof typeof t.notifications]}
                         </p>
                       </div>
                       <Button

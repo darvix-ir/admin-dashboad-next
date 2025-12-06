@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Navbar } from "@/components/layout/navbar";
 import { mockAuth } from "@/lib/auth";
+import { useLanguage } from "@/contexts/language-context";
 
 export default function DashboardLayout({
   children,
@@ -12,6 +13,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const { dir } = useLanguage();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -46,7 +48,11 @@ export default function DashboardLayout({
             className="absolute inset-0 bg-background/80 backdrop-blur-sm transition-opacity duration-300"
             onClick={() => setIsMobileMenuOpen(false)}
           />
-          <aside className="absolute left-0 top-0 h-full transform transition-transform duration-300 ease-out">
+          <aside
+            className={`absolute top-0 h-full transform transition-transform duration-300 ease-out ${
+              dir === "rtl" ? "right-0" : "left-0"
+            }`}
+          >
             <Sidebar
               isCollapsed={false}
               setIsCollapsed={() => setIsMobileMenuOpen(false)}

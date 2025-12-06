@@ -172,6 +172,11 @@ export const en = {
     lowStockDesc: "Product inventory is running low",
     systemUpdate: "System update",
     systemUpdateDesc: "System maintenance scheduled",
+    twoMinutesAgo: "2 minutes ago",
+    fifteenMinutesAgo: "15 minutes ago",
+    oneHourAgo: "1 hour ago",
+    threeHoursAgo: "3 hours ago",
+    fiveHoursAgo: "5 hours ago",
   },
 
   // Profile

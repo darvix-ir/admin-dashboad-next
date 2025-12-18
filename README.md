@@ -9,6 +9,8 @@ A beautiful, modern admin dashboard built with **Next.js 15**, **TypeScript**, *
 
 ![Admin Dashboard Demo](./public/demo.webp)
 
+The demo screenshot showcases the main dashboard, analytics, notifications, profile, and components showcase pages.
+
 ## 🚀 Features
 
 - ✅ **Next.js 15** with App Router
@@ -20,9 +22,12 @@ A beautiful, modern admin dashboard built with **Next.js 15**, **TypeScript**, *
 - ✅ **Responsive design** (mobile-friendly)
 - ✅ **Authentication pages** (Login & Register)
 - ✅ **Dashboard with analytics**
-- ✅ **Data tables** with sorting, filtering, and pagination
+- ✅ **Users data table** with sorting, filtering, and pagination
 - ✅ **Charts** powered by Recharts
 - ✅ **Settings page** with form inputs
+- ✅ **Built‑in i18n** with Persian (fa) and English (en) translations
+- ✅ **RTL/LTR layout support** driven by a `LanguageProvider`
+- ✅ **Language toggle** in both auth pages and the main navbar
 - ✅ **ESLint & Prettier** configured
 - ✅ **Mock data** for development
 
@@ -138,10 +143,14 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ### Dashboard Pages
 
 - **Dashboard (`/dashboard`)**: Main dashboard with stats, charts, and recent orders
-- **Users (`/users`)**: User management with sortable, searchable data table
-- **Orders (`/orders`)**: View all customer orders
+- **Users (`/users`)**: User management with sortable, searchable, filterable data table and pagination
+- **Orders (`/orders`)**: Simple orders table with status badges for each order
 - **Reports (`/reports`)**: Analytics and detailed reports
 - **Settings (`/settings`)**: User preferences and account settings
+- **Analytics (`/analytics`)**: Detailed analytics with metrics cards, traffic sources, top pages, and overview/engagement/conversion tabs
+- **Notifications (`/notifications`)**: Notification center with unread/read tabs, mark‑all‑as‑read, and inline actions
+- **Profile (`/profile`)**: Profile page with avatar, profile form (name, email, phone, location), password change, and recent activity
+- **Components Showcase (`/components-demo`)**: Full gallery of all UI components (buttons, badges, inputs, select, switch, alerts, progress, avatar, skeleton, cards, table, tabs, dialog, dropdown, combined example, color palette)
 
 ## 🎨 Features Breakdown
 

@@ -2,6 +2,13 @@
 
 A beautiful, modern admin dashboard built with **Next.js 15**, **TypeScript**, **Tailwind CSS**, and **shadcn/ui**. Features a clean design with dark/light mode support, responsive layout, and comprehensive dashboard components.
 
+> This template is designed and developed under the **Darvix** brand.  
+> Website: [`https://darvix.ir/`](https://darvix.ir/)
+
+## 🖼️ Demo Preview
+
+![Admin Dashboard Demo](./public/demo.webp)
+
 ## 🚀 Features
 
 - ✅ **Next.js 15** with App Router
@@ -266,4 +273,6 @@ This project is open source and available under the MIT License.
 
 ---
 
-**Built with ❤️ using Next.js 15**
+**Built with ❤️ using Next.js 15 — by [Darvix](https://darvix.ir/)**  
+Darvix: توسعه وب، طراحی UI/UX و محصولات دیجیتال مدرن با تکنولوژی‌های روز.  
+وب‌سایت: [`https://darvix.ir/`](https://darvix.ir/)

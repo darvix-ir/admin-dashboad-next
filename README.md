@@ -7,6 +7,8 @@ A beautiful, modern admin dashboard built with **Next.js 15**, **TypeScript**, *
 
 ## 🖼️ Demo Preview
 
+### **🌐 Live Demo: [https://admin.darvix.ir/login](https://admin.darvix.ir/login)**
+
 ![Admin Dashboard Demo](./public/demo.webp)
 
 The demo screenshot showcases the main dashboard, analytics, notifications, profile, and components showcase pages.

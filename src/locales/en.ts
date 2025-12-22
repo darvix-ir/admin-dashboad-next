@@ -366,14 +366,6 @@ export const en = {
     },
   },
 
-  // Not Found
-  notFound: {
-    title: "Page not found",
-    subtitle: "The page you are looking for doesn’t exist or may have been moved.",
-    actionDashboard: "Back to dashboard",
-    actionLogin: "Go to login page",
-  },
-
   // Common
   common: {
     loading: "Loading...",

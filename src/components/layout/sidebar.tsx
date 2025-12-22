@@ -154,12 +154,7 @@ export function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
       return (
         <div key={item.name}>
           <button
-            onClick={() => {
-              if (isCollapsed) {
-                setIsCollapsed(false);
-              }
-              toggleMenu(item.name);
-            }}
+            onClick={() => toggleMenu(item.name)}
             className={cn(
               "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-colors",
               dir === "rtl" ? "space-x-reverse" : "",
@@ -253,16 +248,14 @@ export function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
       <nav className="flex-1 space-y-4 overflow-y-auto p-2">
         {sections.map((section) => (
           <div key={section.title} className="space-y-1">
-            {!isCollapsed && (
-              <p
-                className={cn(
-                  "px-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground",
-                  dir === "rtl" ? "text-right" : "text-left"
-                )}
-              >
-                {section.title}
-              </p>
-            )}
+            <p
+              className={cn(
+                "px-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground",
+                dir === "rtl" ? "text-right" : "text-left"
+              )}
+            >
+              {section.title}
+            </p>
             {section.items.map((item) => renderNavItem(item))}
           </div>
         ))}

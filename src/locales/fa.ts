@@ -366,14 +366,6 @@ export const fa = {
     },
   },
 
-  // Not Found
-  notFound: {
-    title: "صفحه پیدا نشد",
-    subtitle: "صفحه‌ای که دنبالش هستید وجود ندارد یا ممکن است منتقل شده باشد.",
-    actionDashboard: "بازگشت به داشبورد",
-    actionLogin: "رفتن به صفحه ورود",
-  },
-
   // Common
   common: {
     loading: "در حال بارگذاری...",

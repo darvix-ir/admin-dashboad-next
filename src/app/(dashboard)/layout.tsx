@@ -6,6 +6,7 @@ import { Sidebar } from "@/components/layout/sidebar";
 import { Navbar } from "@/components/layout/navbar";
 import { mockAuth } from "@/lib/auth";
 import { useLanguage } from "@/contexts/language-context";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 export default function DashboardLayout({
   children,
@@ -27,11 +28,7 @@ export default function DashboardLayout({
   }, [router]);
 
   if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="border-primary h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"></div>
-      </div>
-    );
+    return <LoadingSpinner fullScreen size="lg" />;
   }
 
   return (
@@ -64,7 +61,7 @@ export default function DashboardLayout({
       {/* Main content */}
       <div className="flex flex-1 flex-col overflow-hidden">
         <Navbar onMenuClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />
-        <main className="bg-muted/40 flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
+        <main className="flex-1 overflow-y-auto bg-muted/40 p-4 md:p-6 lg:p-8">
           {children}
         </main>
       </div>

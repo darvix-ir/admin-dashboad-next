@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { QueryProvider } from "@/providers/query-provider";
 import { LanguageProvider } from "@/contexts/language-context";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const vazirmatn = Vazirmatn({
@@ -24,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fa" dir="rtl" suppressHydrationWarning>
+    <html lang="en" dir="ltr" suppressHydrationWarning>
       <body className={`${inter.variable} ${vazirmatn.variable} font-sans`}>
         <LanguageProvider>
           <ThemeProvider
@@ -33,7 +34,10 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <QueryProvider>{children}</QueryProvider>
+            <QueryProvider>
+              {children}
+              <Toaster />
+            </QueryProvider>
           </ThemeProvider>
         </LanguageProvider>
       </body>

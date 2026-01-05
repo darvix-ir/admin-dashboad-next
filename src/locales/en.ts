@@ -385,6 +385,9 @@ export const en = {
     language: "Language",
     clear: "Clear",
     apply: "Apply",
+    selected: "Selected",
+    tryAgain: "Try Again",
+    somethingWentWrong: "Something went wrong",
   },
 
   // Status

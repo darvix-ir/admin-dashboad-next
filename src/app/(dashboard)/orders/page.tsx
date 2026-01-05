@@ -19,6 +19,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { ShoppingCart } from "lucide-react";
 
 export default function OrdersPage() {
@@ -51,6 +52,9 @@ export default function OrdersPage() {
 
   return (
     <div className="space-y-6">
+      {/* Breadcrumb */}
+      <Breadcrumb items={[{ label: t.nav.orders }]} />
+
       <div>
         <h1 className="text-3xl font-bold tracking-tight">{t.orders.title}</h1>
         <p className="text-muted-foreground">{t.orders.subtitle}</p>

@@ -20,6 +20,16 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { toast } from "@/lib/toast";
+import { exportToCSV, exportToExcel } from "@/lib/export";
+import { Download, FileText, FileSpreadsheet } from "lucide-react";
 import { ShoppingCart } from "lucide-react";
 
 export default function OrdersPage() {
@@ -67,7 +77,69 @@ export default function OrdersPage() {
               <CardTitle>{t.orders.allOrders}</CardTitle>
               <CardDescription>{t.orders.allOrdersDesc}</CardDescription>
             </div>
-            <ShoppingCart className="h-8 w-8 text-muted-foreground" />
+            <div className="flex items-center gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <Download className="mr-2 h-4 w-4" />
+                    {t.common.export}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem
+                    onClick={() => {
+                      try {
+                        const dataToExport = orders?.map((order) => ({
+                          id: order.id,
+                          customer: order.customer,
+                          product: order.product,
+                          amount: order.amount,
+                          status: order.status,
+                          date: order.date,
+                        })) || [];
+                        exportToCSV(dataToExport, "orders");
+                        toast.success(t.common.exportToCSV);
+                      } catch (error) {
+                        toast.error(
+                          error instanceof Error
+                            ? error.message
+                            : t.common.somethingWentWrong
+                        );
+                      }
+                    }}
+                  >
+                    <FileText className="mr-2 h-4 w-4" />
+                    {t.common.exportToCSV}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      try {
+                        const dataToExport = orders?.map((order) => ({
+                          id: order.id,
+                          customer: order.customer,
+                          product: order.product,
+                          amount: order.amount,
+                          status: order.status,
+                          date: order.date,
+                        })) || [];
+                        exportToExcel(dataToExport, "orders", "Orders");
+                        toast.success(t.common.exportToExcel);
+                      } catch (error) {
+                        toast.error(
+                          error instanceof Error
+                            ? error.message
+                            : t.common.somethingWentWrong
+                        );
+                      }
+                    }}
+                  >
+                    <FileSpreadsheet className="mr-2 h-4 w-4" />
+                    {t.common.exportToExcel}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <ShoppingCart className="h-8 w-8 text-muted-foreground" />
+            </div>
           </div>
         </CardHeader>
         <CardContent>

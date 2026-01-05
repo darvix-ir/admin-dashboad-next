@@ -385,6 +385,9 @@ export const fa = {
     language: "زبان",
     clear: "پاک کردن",
     apply: "اعمال",
+    selected: "انتخاب شده",
+    tryAgain: "تلاش مجدد",
+    somethingWentWrong: "مشکلی پیش آمد",
   },
 
   // Status

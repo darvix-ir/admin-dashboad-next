@@ -7,6 +7,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { mockAuth } from "@/lib/auth";
 import { useLanguage } from "@/contexts/language-context";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { ErrorBoundary } from "@/components/error-boundary";
 
 export default function DashboardLayout({
   children,
@@ -32,39 +33,41 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      {/* Desktop Sidebar */}
-      <aside className="hidden md:flex">
-        <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
-      </aside>
+    <ErrorBoundary>
+      <div className="flex h-screen overflow-hidden">
+        {/* Desktop Sidebar */}
+        <aside className="hidden md:flex">
+          <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+        </aside>
 
-      {/* Mobile Sidebar */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 md:hidden">
-          <div
-            className="absolute inset-0 bg-background/80 backdrop-blur-sm transition-opacity duration-300"
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
-          <aside
-            className={`absolute top-0 h-full transform transition-transform duration-300 ease-out ${
-              dir === "rtl" ? "right-0" : "left-0"
-            }`}
-          >
-            <Sidebar
-              isCollapsed={false}
-              setIsCollapsed={() => setIsMobileMenuOpen(false)}
+        {/* Mobile Sidebar */}
+        {isMobileMenuOpen && (
+          <div className="fixed inset-0 z-50 md:hidden">
+            <div
+              className="absolute inset-0 bg-background/80 backdrop-blur-sm transition-opacity duration-300"
+              onClick={() => setIsMobileMenuOpen(false)}
             />
-          </aside>
-        </div>
-      )}
+            <aside
+              className={`absolute top-0 h-full transform transition-transform duration-300 ease-out ${
+                dir === "rtl" ? "right-0" : "left-0"
+              }`}
+            >
+              <Sidebar
+                isCollapsed={false}
+                setIsCollapsed={() => setIsMobileMenuOpen(false)}
+              />
+            </aside>
+          </div>
+        )}
 
-      {/* Main content */}
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <Navbar onMenuClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />
-        <main className="flex-1 overflow-y-auto bg-muted/40 p-4 md:p-6 lg:p-8">
-          {children}
-        </main>
+        {/* Main content */}
+        <div className="flex flex-1 flex-col overflow-hidden">
+          <Navbar onMenuClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />
+          <main className="flex-1 overflow-y-auto bg-muted/40 p-4 md:p-6 lg:p-8">
+            {children}
+          </main>
+        </div>
       </div>
-    </div>
+    </ErrorBoundary>
   );
 }

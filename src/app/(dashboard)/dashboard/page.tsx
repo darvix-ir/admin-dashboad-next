@@ -5,6 +5,7 @@ import { api } from "@/lib/api";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { OverviewChart } from "@/components/dashboard/overview-chart";
 import { RecentOrders } from "@/components/dashboard/recent-orders";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { DollarSign, Users, ShoppingCart, TrendingUp } from "lucide-react";
 import { mockAuth } from "@/lib/auth";
 import { useLanguage } from "@/contexts/language-context";
@@ -46,6 +47,9 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
+      {/* Breadcrumb */}
+      <Breadcrumb items={[{ label: t.nav.dashboard }]} />
+
       {/* Welcome message */}
       <div>
         <h1 className="text-3xl font-bold tracking-tight">

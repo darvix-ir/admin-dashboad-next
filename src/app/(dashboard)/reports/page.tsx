@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { useLanguage } from "@/contexts/language-context";
@@ -10,11 +11,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { OverviewChart } from "@/components/dashboard/overview-chart";
-import { BarChart3, TrendingUp, DollarSign, Users } from "lucide-react";
+import { toast } from "@/lib/toast";
+import { exportToPDF } from "@/lib/export";
+import { BarChart3, TrendingUp, DollarSign, Users, FileText, Download } from "lucide-react";
 
 export default function ReportsPage() {
   const { t } = useLanguage();
+  const [isExporting, setIsExporting] = useState(false);
   const { data: chartData, isLoading: chartLoading } = useQuery({
     queryKey: ["chart-data"],
     queryFn: api.getChartData,
@@ -24,6 +30,20 @@ export default function ReportsPage() {
     queryKey: ["dashboard-stats"],
     queryFn: api.getDashboardStats,
   });
+
+  const handleExportPDF = async () => {
+    setIsExporting(true);
+    try {
+      await exportToPDF("reports-content", "reports");
+      toast.success(t.common.exportToPDF);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : t.common.somethingWentWrong
+      );
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   if (chartLoading || statsLoading) {
     return (
@@ -35,10 +55,34 @@ export default function ReportsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">{t.reports.title}</h1>
-        <p className="text-muted-foreground">{t.reports.subtitle}</p>
+      {/* Breadcrumb */}
+      <Breadcrumb items={[{ label: t.nav.reports }]} />
+
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">{t.reports.title}</h1>
+          <p className="text-muted-foreground">{t.reports.subtitle}</p>
+        </div>
+        <Button
+          variant="outline"
+          onClick={handleExportPDF}
+          disabled={isExporting}
+        >
+          {isExporting ? (
+            <>
+              <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"></div>
+              {t.common.loading}
+            </>
+          ) : (
+            <>
+              <FileText className="mr-2 h-4 w-4" />
+              {t.common.exportToPDF}
+            </>
+          )}
+        </Button>
       </div>
+
+      <div id="reports-content">
 
       {/* Summary Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -166,6 +210,7 @@ export default function ReportsPage() {
             </div>
           </CardContent>
         </Card>
+      </div>
       </div>
     </div>
   );

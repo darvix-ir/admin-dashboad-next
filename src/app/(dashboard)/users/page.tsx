@@ -26,8 +26,40 @@ import { Button } from "@/components/ui/button";
 import { Pagination } from "@/components/ui/pagination";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { FileUpload } from "@/components/ui/file-upload";
 import { toast } from "@/lib/toast";
-import { Search, ArrowUpDown, Trash2, Ban, CheckCircle2 } from "lucide-react";
+import { exportToCSV, exportToExcel } from "@/lib/export";
+import {
+  importUsersFromCSV,
+  mergeUsers,
+  type ImportResult,
+} from "@/lib/import";
+import {
+  Search,
+  ArrowUpDown,
+  Trash2,
+  Ban,
+  CheckCircle2,
+  Download,
+  Upload,
+  FileText,
+  FileSpreadsheet,
+} from "lucide-react";
 import { User } from "@/types";
 
 export default function UsersPage() {
@@ -40,6 +72,9 @@ export default function UsersPage() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [importDialogOpen, setImportDialogOpen] = useState(false);
+  const [importResult, setImportResult] = useState<ImportResult | null>(null);
+  const [isImporting, setIsImporting] = useState(false);
   const itemsPerPage = 5;
 
   const { data: users, isLoading } = useQuery({
@@ -141,6 +176,76 @@ export default function UsersPage() {
       );
       setSelectedUsers([]);
     }, 500);
+  };
+
+  const handleExportCSV = () => {
+    try {
+      const dataToExport = filteredAndSortedUsers.map((user) => ({
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        status: user.status,
+        createdAt: user.createdAt,
+      }));
+      exportToCSV(dataToExport, "users");
+      toast.success(t.common.exportToCSV);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : t.common.somethingWentWrong
+      );
+    }
+  };
+
+  const handleExportExcel = () => {
+    try {
+      const dataToExport = filteredAndSortedUsers.map((user) => ({
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        status: user.status,
+        createdAt: user.createdAt,
+      }));
+      exportToExcel(dataToExport, "users", "Users");
+      toast.success(t.common.exportToExcel);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : t.common.somethingWentWrong
+      );
+    }
+  };
+
+  const handleFileSelect = async (file: File) => {
+    setIsImporting(true);
+    setImportResult(null);
+
+    try {
+      const result = await importUsersFromCSV(file);
+      setImportResult(result);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : t.common.importError
+      );
+      setIsImporting(false);
+    } finally {
+      setIsImporting(false);
+    }
+  };
+
+  const handleConfirmImport = () => {
+    if (!importResult || !importResult.success || importResult.data.length === 0) {
+      return;
+    }
+
+    queryClient.setQueryData(["users"], (old: any) => {
+      const existingUsers = old || [];
+      return mergeUsers(importResult.data, existingUsers);
+    });
+
+    toast.success(
+      `${importResult.validRows} ${t.common.usersImported}`
+    );
+    setImportDialogOpen(false);
+    setImportResult(null);
   };
 
   if (isLoading) {
@@ -337,10 +442,42 @@ export default function UsersPage() {
       {/* Table Card */}
       <Card>
         <CardHeader>
-          <CardTitle>{t.users.allUsers}</CardTitle>
-          <CardDescription>
-            {filteredAndSortedUsers.length} {t.users.of} {users?.length || 0}
-          </CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>{t.users.allUsers}</CardTitle>
+              <CardDescription>
+                {filteredAndSortedUsers.length} {t.users.of} {users?.length || 0}
+              </CardDescription>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setImportDialogOpen(true)}
+              >
+                <Upload className="mr-2 h-4 w-4" />
+                {t.common.importCSV}
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <Download className="mr-2 h-4 w-4" />
+                    {t.common.export}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={handleExportCSV}>
+                    <FileText className="mr-2 h-4 w-4" />
+                    {t.common.exportToCSV}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleExportExcel}>
+                    <FileSpreadsheet className="mr-2 h-4 w-4" />
+                    {t.common.exportToExcel}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
 
@@ -443,6 +580,134 @@ export default function UsersPage() {
           />
         </CardContent>
       </Card>
+
+      {/* Import Dialog */}
+      <Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>{t.common.importUsers}</DialogTitle>
+            <DialogDescription>
+              {t.common.dragAndDrop}. {t.common.onlyCSVFiles}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <FileUpload
+              accept=".csv"
+              onFileSelect={handleFileSelect}
+              disabled={isImporting}
+            />
+
+            {isImporting && (
+              <div className="flex items-center justify-center py-4">
+                <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent"></div>
+                <span className="ml-2 text-sm text-muted-foreground">
+                  {t.common.importingUsers}
+                </span>
+              </div>
+            )}
+
+            {importResult && (
+              <div className="space-y-4">
+                <div className="rounded-md border p-4">
+                  <div className="grid grid-cols-3 gap-4 text-sm">
+                    <div>
+                      <p className="text-muted-foreground">{t.common.totalRows}</p>
+                      <p className="text-lg font-semibold">{importResult.totalRows}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">{t.common.validRows}</p>
+                      <p className="text-lg font-semibold text-green-600">
+                        {importResult.validRows}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">{t.common.invalidRows}</p>
+                      <p className="text-lg font-semibold text-red-600">
+                        {importResult.invalidRows}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {importResult.errors.length > 0 && (
+                  <div className="max-h-40 overflow-y-auto rounded-md border border-destructive/50 bg-destructive/10 p-3">
+                    <p className="mb-2 text-sm font-semibold text-destructive">
+                      {t.common.error}:
+                    </p>
+                    <ul className="list-inside list-disc space-y-1 text-xs text-destructive">
+                      {importResult.errors.slice(0, 10).map((error, index) => (
+                        <li key={index}>{error}</li>
+                      ))}
+                      {importResult.errors.length > 10 && (
+                        <li>... and {importResult.errors.length - 10} more errors</li>
+                      )}
+                    </ul>
+                  </div>
+                )}
+
+                {importResult.data.length > 0 && (
+                  <div className="max-h-60 overflow-y-auto rounded-md border">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>{t.users.name}</TableHead>
+                          <TableHead>{t.users.email}</TableHead>
+                          <TableHead>{t.users.role}</TableHead>
+                          <TableHead>{t.users.status}</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {importResult.data.slice(0, 5).map((user) => (
+                          <TableRow key={user.id}>
+                            <TableCell>{user.name}</TableCell>
+                            <TableCell>{user.email}</TableCell>
+                            <TableCell>
+                              <Badge variant="outline">{user.role}</Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Badge
+                                variant={
+                                  user.status === "active" ? "default" : "secondary"
+                                }
+                              >
+                                {t.users[user.status as keyof typeof t.users]}
+                              </Badge>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                    {importResult.data.length > 5 && (
+                      <p className="p-2 text-center text-xs text-muted-foreground">
+                        Showing first 5 of {importResult.data.length} users
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setImportDialogOpen(false);
+                setImportResult(null);
+              }}
+            >
+              {t.common.cancel}
+            </Button>
+            <Button
+              onClick={handleConfirmImport}
+              disabled={!importResult?.success || importResult.data.length === 0}
+            >
+              {t.common.confirmImport}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

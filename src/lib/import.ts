@@ -15,7 +15,7 @@ export interface CSVRow {
   email?: string;
   role?: string;
   status?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /**

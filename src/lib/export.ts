@@ -6,7 +6,7 @@ import html2canvas from "html2canvas";
 /**
  * Export data to CSV file
  */
-export function exportToCSV<T extends Record<string, any>>(
+export function exportToCSV<T extends Record<string, unknown>>(
   data: T[],
   filename: string
 ): void {
@@ -30,7 +30,7 @@ export function exportToCSV<T extends Record<string, any>>(
 /**
  * Export data to Excel file
  */
-export function exportToExcel<T extends Record<string, any>>(
+export function exportToExcel<T extends Record<string, unknown>>(
   data: T[],
   filename: string,
   sheetName: string = "Sheet1"

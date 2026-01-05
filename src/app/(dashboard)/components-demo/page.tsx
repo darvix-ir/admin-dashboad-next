@@ -62,7 +62,7 @@ import { CodeBlock } from "@/components/ui/code-block";
 import { cn } from "@/lib/utils";
 
 export default function ComponentsDemoPage() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const [switchValue, setSwitchValue] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 

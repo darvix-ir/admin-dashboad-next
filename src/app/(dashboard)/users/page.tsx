@@ -33,7 +33,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogClose,
 } from "@/components/ui/dialog";
 import {
   DropdownMenu,
@@ -63,7 +62,7 @@ import {
 import { User } from "@/types";
 
 export default function UsersPage() {
-  const { t, dir } = useLanguage();
+  const { t } = useLanguage();
   const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState<keyof User>("name");
@@ -149,8 +148,8 @@ export default function UsersPage() {
 
     // Simulate API call
     setTimeout(() => {
-      queryClient.setQueryData(["users"], (old: any) =>
-        old?.filter((user: User) => !selectedUsers.includes(user.id))
+      queryClient.setQueryData(["users"], (old: User[] | undefined) =>
+        (old || []).filter((user: User) => !selectedUsers.includes(user.id))
       );
       toast.success(
         `${selectedUsers.length} ${t.users.title.toLowerCase()} ${t.common.delete.toLowerCase()}`
@@ -164,8 +163,8 @@ export default function UsersPage() {
 
     // Simulate API call
     setTimeout(() => {
-      queryClient.setQueryData(["users"], (old: any) =>
-        old?.map((user: User) =>
+      queryClient.setQueryData(["users"], (old: User[] | undefined) =>
+        (old || []).map((user: User) =>
           selectedUsers.includes(user.id) ? { ...user, status } : user
         )
       );
@@ -236,7 +235,7 @@ export default function UsersPage() {
       return;
     }
 
-    queryClient.setQueryData(["users"], (old: any) => {
+    queryClient.setQueryData(["users"], (old: User[] | undefined) => {
       const existingUsers = old || [];
       return mergeUsers(importResult.data, existingUsers);
     });
@@ -459,7 +458,7 @@ export default function UsersPage() {
                 {t.common.importCSV}
               </Button>
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+                <DropdownMenuTrigger>
                   <Button variant="outline" size="sm">
                     <Download className="mr-2 h-4 w-4" />
                     {t.common.export}

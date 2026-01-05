@@ -16,7 +16,7 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { OverviewChart } from "@/components/dashboard/overview-chart";
 import { toast } from "@/lib/toast";
 import { exportToPDF } from "@/lib/export";
-import { BarChart3, TrendingUp, DollarSign, Users, FileText, Download } from "lucide-react";
+import { BarChart3, TrendingUp, DollarSign, Users, FileText } from "lucide-react";
 
 export default function ReportsPage() {
   const { t } = useLanguage();
